@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.board.mapper.BoardMapper">
+
+	<sql id="boardColumns">
+		 IDX
+		,TITLE
+		,CONTENT
+		,WRITER
+		,VIEW_CNT
+		,NOTICE_YN
+		,SECRET_YN
+		,DELETE_YN
+		,INSERT_TIME
+		,UPDATE_TIME
+		,DELETE_TIME
+	</sql>
+
+	<insert id="insertBoard" parameterType="BoardDTO">
+		INSERT INTO TB_BOARD(
+			<include refid="boardColumns" />
+		)VALUES(
+			  #{idx}
+			, #{title}
+			, #{content}
+			, #{writer}
+			, 0
+			, IFNULL(#{noticeYn}, 'N')
+			, IFNULL(#{secretYn}, 'N')
+			, 'N'
+			, NOW()
+			, NULL
+			, NULL
+		)
+
+	</insert>
+
+	<select id="selectBoardDetail" parameterType="long" resultType="BoardDTO">
+		SELECT
+			<include refid="boardColumns" />
+		FROM
+			TB_BOARD
+		WHERE
+			DELETE_YN = 'N'
+		AND
+			IDX = #{idx}
+	</select>
+
+	<update id="updateBoard" parameterType="BoardDTO">
+		UPDATE TB_BOARD
+		SET
+			  UPDATE_TIME = NOW()
+			, TITLE = #{title}
+			, CONTENT = #{content}
+			, WRITER = #{writer}
+			, NOTICE_YN = IFNULL(#{noticeYn}, 'N')
+			, SECRET_YN = IFNULL(#{secretYn}, 'N')
+		WHERE
+			IDX = #{idx}
+	</update>
+
+	<update id="deleteBoard" parameterType="long">
+		UPDATE TB_BOARD
+		SET
+			  DELETE_YN = 'Y'
+			, DELETE_TIME = NOW()
+		WHERE
+			IDX = #{idx}
+	</update>
+
+	<select id="selectBoardList" parameterType="BoardDTO" resultType="BoardDTO">
+		SELECT
+			<include refid="boardColumns" />
+		FROM
+			TB_BOARD
+		WHERE
+			DELETE_YN = 'N'
+		ORDER BY
+			NOTICE_YN ASC,
+			IDX DESC,
+			INSERT_TIME DESC
+	</select>
+
+	<select id="selectBoardTotalCount" parameterType="BoardDTO" resultType="int">
+		SELECT
+			COUNT(*)
+		FROM
+			TB_BOARD
+		WHERE
+			DELETE_YN = 'N'
+	</select>
+</mapper>

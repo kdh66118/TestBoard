@@ -48,10 +48,21 @@ public class DBConfiguration {
 	public SqlSessionFactory sqlSessionFactory() throws Exception {
 		SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
 		factoryBean.setDataSource(dataSource());
+		factoryBean.setMapperLocations(applicationContext.getResources("classpath:/mappers/**/*Mapper.xml")); // ~ Mapper.xml 파일을 읽어들임
+		factoryBean.setTypeAliasesPackage("com.board.domain");//XML에서 parameterType과 resultType에 사용할 alias(별칭)지정
+		factoryBean.setConfiguration(mybatisConfg());
 		return factoryBean.getObject();
 	}
 
+	@Bean
 	public SqlSessionTemplate sqlSession() throws Exception {
 		return new SqlSessionTemplate(sqlSessionFactory());
+	}
+
+	@Bean
+	@ConfigurationProperties(prefix = "mybatis.configuration")
+	//application.properties에서 mybatis.configuration으로 시작하는 모든 설정을 읽어 들여 빈(Bean)으로 등록합니다.
+	public org.apache.ibatis.session.Configuration mybatisConfg(){
+		return new org.apache.ibatis.session.Configuration();
 	}
 }
