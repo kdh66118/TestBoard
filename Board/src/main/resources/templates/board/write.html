@@ -60,6 +60,10 @@
 
 	<th:block layout:fragment="script">
 		<script th:inline="javascript">
+		/*
+		타임리프는 '<', '>' 태그를 엄격하게 검사하기 때문에
+		자바스크립트 코드는 꼭 CDATA로 묶어줘야 한다고
+		*/
 			/*<![CDATA[*/
 
 			function registerBoard(form) {
