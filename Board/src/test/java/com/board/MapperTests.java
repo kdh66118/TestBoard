@@ -108,27 +108,27 @@ public class MapperTests {
 			boardMapper.insertBoard(params);
 		}
 	}
-
-	@Test
-	public void testOfSelectList() {
-		int boardTotalCount = boardMapper.selectBoardTotalCount();
-
-		if(boardTotalCount > 0) { // 게시글이 1개 이상일 때 조회
-			List<BoardDTO> boardList = boardMapper.selectBoardList();
-
-	//if 문에서는 스프링에서 지원해주는 CollectionsUtil의 isEmpty 메서드를 이용해서
-	//boardList가 비어있지 않은지 체크하고, forEach를 실행해서
-
-			if(CollectionUtils.isEmpty(boardList) == false) {
-				for(BoardDTO board : boardList) {
-					System.out.println("=========================");
-					System.out.println(board.getTitle());
-					System.out.println(board.getContent());
-					System.out.println(board.getWriter());
-					System.out.println("=========================");
-				}
-			}
-		}
-
-	}
+//
+//	@Test
+//	public void testOfSelectList() {
+//		int boardTotalCount = boardMapper.selectBoardTotalCount(Criter);
+//
+//		if(boardTotalCount > 0) { // 게시글이 1개 이상일 때 조회
+//			List<BoardDTO> boardList = boardMapper.selectBoardList();
+//
+//	//if 문에서는 스프링에서 지원해주는 CollectionsUtil의 isEmpty 메서드를 이용해서
+//	//boardList가 비어있지 않은지 체크하고, forEach를 실행해서
+//
+//			if(CollectionUtils.isEmpty(boardList) == false) {
+//				for(BoardDTO board : boardList) {
+//					System.out.println("=========================");
+//					System.out.println(board.getTitle());
+//					System.out.println(board.getContent());
+//					System.out.println(board.getWriter());
+//					System.out.println("=========================");
+//				}
+//			}
+//		}
+//
+//	}
 }

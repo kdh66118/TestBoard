@@ -79,6 +79,8 @@
 			NOTICE_YN ASC,
 			IDX DESC,
 			INSERT_TIME DESC
+		LIMIT
+			#{paginationInfo.firstRecordIndex}, #{recordsPerPage}
 	</select>
 
 	<select id="selectBoardTotalCount" parameterType="BoardDTO" resultType="int">

@@ -11,12 +11,16 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 @Configuration //스프링은 @Configuration이 지정된 클래스를 자바 기반의 설정 파일로 인식
 @PropertySource("classpath:/application.properties") // 해당 클래스에서 참조할 properties 파일 위치를 지정
+@EnableTransactionManagement
 public class DBConfiguration {
 
 	@Autowired // 빈 주입 @Resource, @Inject 등이 존재합니다.
@@ -26,6 +30,15 @@ public class DBConfiguration {
 		빈(Bean)은 쉽게 이야기하면 객체입니다.
 
 	 */
+
+	@Bean
+	public PlatformTransactionManager transactionManager() {
+		return new DataSourceTransactionManager(dataSource());
+	}
+/*
+ 	트랜잭션 매니저 등록
+ * */
+
 	@Bean
 	@ConfigurationProperties(prefix = "spring.datasource.hikari")
 	/*	우리는 prefix에 spring.datasource.hikari를 지정하였는데요,
@@ -49,7 +62,7 @@ public class DBConfiguration {
 		SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
 		factoryBean.setDataSource(dataSource());
 		factoryBean.setMapperLocations(applicationContext.getResources("classpath:/mappers/**/*Mapper.xml")); // ~ Mapper.xml 파일을 읽어들임
-		factoryBean.setTypeAliasesPackage("com.board.domain");//XML에서 parameterType과 resultType에 사용할 alias(별칭)지정
+		factoryBean.setTypeAliasesPackage("com.board.*");//XML에서 parameterType과 resultType에 사용할 alias(별칭)지정
 		factoryBean.setConfiguration(mybatisConfg());
 		return factoryBean.getObject();
 	}

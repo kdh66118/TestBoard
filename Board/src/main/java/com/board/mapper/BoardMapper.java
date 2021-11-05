@@ -3,12 +3,14 @@ package com.board.mapper;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.dao.DataAccessException;
 
 import com.board.domain.BoardDTO;
+import com.board.paging.Criteria;
 
 @Mapper
 public interface BoardMapper {
-	public int insertBoard(BoardDTO params);
+	public int insertBoard(BoardDTO params) throws DataAccessException;
 
 	public BoardDTO selectBoardDetail(Long idx);
 
@@ -16,7 +18,7 @@ public interface BoardMapper {
 
 	public int deleteBoard(Long idx);
 
-	public List<BoardDTO> selectBoardList();
+	public List<BoardDTO> selectBoardList(BoardDTO params);
 
-	public int selectBoardTotalCount();
+	public int selectBoardTotalCount(BoardDTO params);
 }
