@@ -75,12 +75,13 @@
 			TB_BOARD
 		WHERE
 			DELETE_YN = 'N'
+			<include refid="CommonMapper.search" />
 		ORDER BY
 			NOTICE_YN ASC,
 			IDX DESC,
 			INSERT_TIME DESC
-		LIMIT
-			#{paginationInfo.firstRecordIndex}, #{recordsPerPage}
+		<include refid="CommonMapper.paging" />
+
 	</select>
 
 	<select id="selectBoardTotalCount" parameterType="BoardDTO" resultType="int">
@@ -90,5 +91,6 @@
 			TB_BOARD
 		WHERE
 			DELETE_YN = 'N'
+			<include refid="CommonMapper.search" />
 	</select>
 </mapper>
