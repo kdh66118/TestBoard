@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.board.constant.Method;
 import com.board.domain.BoardDTO;
-import com.board.paging.Criteria;
 import com.board.service.BoardService;
 import com.board.util.UiUtils;
 
@@ -43,7 +42,6 @@ public class BoardController extends UiUtils{
 	@PostMapping(value="/board/register.do")
 	public String registerBoard(@ModelAttribute("params") final BoardDTO params, Model model) throws Exception {
 		Map<String, Object> pagingParams = getPagingParams(params);
-
 			try {
 				boolean isRegisterd = boardService.registerBoard(params);
 				if(isRegisterd == false) {
@@ -59,7 +57,6 @@ public class BoardController extends UiUtils{
 
 	@GetMapping(value="/board/list.do")
 	public String openBoardList(@ModelAttribute("params") BoardDTO params, Model model) {
-		System.out.println("zzzz");
 		List<BoardDTO> boardList = boardService.getBoardList(params);
 /*
 	@ModelAttribute를 이용하면 파라미터로 전달받은 객체를 자동으로 뷰까지 전달할 수 있습니다.

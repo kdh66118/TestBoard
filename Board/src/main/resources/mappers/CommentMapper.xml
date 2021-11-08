@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.board.mapper.CommentMapper">
+
+	<sql id="commentColumns">
+		  idx
+		, board_idx
+		, content
+		, writer
+		, delete_yn
+		, insert_time
+		, update_time
+		, delete_time
+	</sql>
+
+	<insert id="insertComment" parameterType="CommentDTO">
+		INSERT INTO TB_COMMENT (
+			<include refid="commentColumns" />
+		)VALUES(
+			#{idx}
+			, #{boardIdx}
+			, #{content}
+			, #{writer}
+			, IFNULL(#{deleteYn}, 'N')
+			, NOW()
+			, NULL
+			, NULL
+		)
+	</insert>
+
+	<select id="selectCommentDetail" parameterType="long" resultType="CommentDTO">
+	/*댓글 조회*/
+		SELECT
+			<include refid="commentColumns" />
+		FROM
+			TB_COMMENT
+		WHERE
+			DELETE_YN = 'N'
+		AND
+			IDX = #{idx}
+	</select>
+
+	<update id="updateComment" parameterType="CommentDTO">
+	/* 댓글 수정 */
+		UPDATE TB_COMMENT
+		SET
+			UPDATE_TIME = NOW()
+			, CONTENT = #{content}
+			, WRITER = #{writer}
+		WHERE
+			IDX = #{idx}
+	</update>
+
+	<delete id="deleteComment" parameterType="long">
+	/* 댓글 삭제 */
+		UPDATE TB_COMMENT
+		SET
+			DELETE_YN = 'Y'
+			, DELETE_TIME = NOW()
+		WHERE
+			IDX = #{idx}
+	</delete>
+
+	<select id="selectCommentList" parameterType="CommentDTO" resultType="CommentDTO" >
+	/* 댓글 리스트 */
+		SELECT
+			<include refid="commentColumns" />
+		FROM
+			TB_COMMENT
+		WHERE
+			DELETE_YN = 'N'
+		AND BOARD_IDX = #{boardIdx}
+		ORDER BY
+			IDX DESC,
+			INSERT_TIME DESC
+	</select>
+
+	<select id="selectCommentTotalCount" parameterType="CommentDTO" resultType="int">
+	/* 댓글 총 개수 */
+		SELECT
+			COUNT(*)
+		FROM
+			TB_COMMENT
+		WHERE
+			DELETE_YN = 'N'
+		AND
+			BOARD_IDX = #{boardIdx}
+	</select>
+
+</mapper>
