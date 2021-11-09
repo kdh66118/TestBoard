@@ -47,7 +47,7 @@
 		UPDATE TB_ATTACH
 		SET
 			DELETE_YN = 'Y'
-			, DELETE_TIME NOW()
+			, DELETE_TIME = NOW()
 		WHERE
 			BOARD_IDX = #{boardIdx}
 	</delete>
@@ -73,5 +73,16 @@
 		AND
 				BOARD_IDX = #{boardIdx}
 	</select>
+
+	<update id="undeleteAttach" parameterType="list">
+		UPDATE tb_attach
+		SET
+			DELETE_YN = 'N'
+		WHERE
+			IDX IN
+		<foreach collection="list" item="item" separator="," open="(" close=")">
+			#{item}
+		</foreach>
+	</update>
 
 </mapper>

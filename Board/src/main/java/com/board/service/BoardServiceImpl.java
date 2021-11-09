@@ -36,12 +36,20 @@ public class BoardServiceImpl implements BoardService{
 			queryResult = boardMapper.insertBoard(params);
 		}else {
 			queryResult = boardMapper.updateBoard(params);
+
+			if("Y".equals(params.getChangeYn())) {
+				attachMapper.deleteAttach(params.getIdx());
+
+				if(CollectionUtils.isEmpty(params.getFileIdxs()) == false) {
+					attachMapper.undeleteAttach(params.getFileIdxs());
+				}
+			}
 		}
 //
 //		BoardDTO board = null;
 //		System.out.println(board.getTitle());
 
-		return queryResult == 1 ? true : false;
+		return (queryResult > 0);
 	}
 
 	@Override
@@ -101,6 +109,17 @@ public class BoardServiceImpl implements BoardService{
 		}
 
 		return boardList;
+	}
+
+	@Override
+	public List<AttachDTO> getAttachFileList(Long boardIdx) {
+
+		int fileTotalCount = attachMapper.selectAttachTotalCount(boardIdx);
+		if(fileTotalCount < 1) {
+			return Collections.emptyList();
+		}
+
+		return attachMapper.selectAttachList(boardIdx);
 	}
 
 

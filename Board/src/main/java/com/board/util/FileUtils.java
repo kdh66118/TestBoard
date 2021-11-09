@@ -44,16 +44,11 @@ public class FileUtils {
 	 */
 	public List<AttachDTO> uploadFiles(MultipartFile[] files, Long boardIdx){
 
-		/* 파일이 비어있으면 비어있는 리스트 반환 */
-		if(files[0].getSize() < 1 ) {
-			return Collections.emptyList();
-		}
-
 		/* 업로드 파일 정보를 담을 비어있는 리스트 */
 		List<AttachDTO> attachList = new ArrayList<>();
 
 		/* uploadPath에 해당하는 디렉터리가 존재하지 않으면, 부모 디렉터리를 포함한 모든 디렉터리를 생성 */
-		File dir =new File(uploadPath);
+		File dir = new File(uploadPath);
 		if(dir.exists() == false) {
 			dir.mkdirs();
 		}
@@ -61,6 +56,9 @@ public class FileUtils {
 
 		/* 파일 개수만큼 forEach 실행 */
 		for(MultipartFile file : files) {
+			if(file.getSize() < 1) {
+				continue;
+			}
 
 			try {
 				//파일 확장자
@@ -76,7 +74,7 @@ public class FileUtils {
 				/* 파일 정보 저장 */
 				AttachDTO attach = new AttachDTO();
 				attach.setBoardIdx(boardIdx);
-				attach.setOriginalName(saveName);
+				attach.setOriginalName(file.getOriginalFilename());
 				attach.setSaveName(saveName);
 				attach.setSize(file.getSize());
 

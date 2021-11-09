@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.board.constant.Method;
+import com.board.domain.AttachDTO;
 import com.board.domain.BoardDTO;
 import com.board.service.BoardService;
 import com.board.util.UiUtils;
@@ -36,6 +37,9 @@ public class BoardController extends UiUtils{
 				return showMessageWithRedirect("없는 게시글이거나 이미 삭제된 게시글입니다.", "/board/list.do", Method.GET, null, model);
 			}
 			model.addAttribute("board", board);
+
+			List<AttachDTO> fileList = boardService.getAttachFileList(idx);
+			model.addAttribute("fileList", fileList);
 		}
 		return "board/write";
 	}
@@ -49,7 +53,7 @@ public class BoardController extends UiUtils{
 					return showMessageWithRedirect("게시글 등록에 실패하였습니다.", "/baord/list.do", Method.GET, pagingParams, model);
 				}
 			} catch (DataAccessException e) {
-				return showMessageWithRedirect("데이터베이스 처리 과정에 문제가 발생하였습니다.", "/baord/list.do", Method.GET, pagingParams, model);
+				return showMessageWithRedirect("데이터베이스 처리 과정에 문제가 발생하였습니다.", "/board/list.do", Method.GET, pagingParams, model);
 			} catch (Exception e) {
 				return showMessageWithRedirect("시스템에 문제가 발생하였습니다.", "/board/list.do", Method.GET, pagingParams, model);
 			}
