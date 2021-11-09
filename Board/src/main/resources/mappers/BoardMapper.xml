@@ -16,7 +16,7 @@
 		,DELETE_TIME
 	</sql>
 
-	<insert id="insertBoard" parameterType="BoardDTO">
+	<insert id="insertBoard" parameterType="BoardDTO" useGeneratedKeys="true" keyProperty="idx">
 		INSERT INTO TB_BOARD(
 			<include refid="boardColumns" />
 		)VALUES(
@@ -93,4 +93,5 @@
 			DELETE_YN = 'N'
 			<include refid="CommonMapper.search" />
 	</select>
+
 </mapper>
